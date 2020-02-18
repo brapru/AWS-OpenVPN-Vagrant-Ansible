@@ -1,0 +1,67 @@
+---
+
+### Configure IPv4 firewall rules. Note that Ansible hangs after an
+# iptables-restore. See resource below for a quick workaround to load iptables 
+# https://www.shysecurity.com/post/20160427-Ansible%20iptables%20workaround
+- name: firewall | Configure /etc/rules.blank (workaround)
+  template:
+    src: etc_iptables_workaround.j2
+    dest: /etc/iptables/rules.blank
+    owner: root
+    group: root
+
+- name: firewall | Initialize Firewall Connection Tracking (workaround)
+  shell: iptables-restore /etc/iptables/rules.blank
+
+- name: firewall | Configure IPv4 iptables
+  template: src=etc_iptables_rules_v4.j2 dest=/etc/iptables/rules.v4
+  notify: restore /etc/iptables/rules.v4
+
+### Disable IPv6
+- name: firewall | Drop all IPv6 Packets
+  template:
+    src: etc_iptables_rules_v6.j2
+    dest: /etc/iptables/rules.v6
+    owner: root
+    group: root
+
+- name: firewall | Disable IPv6
+  template:
+    src: 99_sysctl.j2
+    dest: /etc/sysctl.d/99-sysctl.conf
+
+- name: firewall | Restore IPv6 iptables
+  shell: ip6tables-restore /etc/iptables/rules.v6
+
+### Allow traffic to leave the VPN
+- name: firewall | Routing Rule to Leave VPN
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    source: 10.89.0.0/24
+    out_interface: eth0
+    jump: MASQUERADE
+
+### Reconfigure iptables-persistent
+# dpkg-reconfigure iptables-persistent
+- name: firewall | Load Rulesets into Persistent
+  debconf:
+    name: iptables-persistent
+    question: iptables-persistent/autosave_v4
+    value: 'true'
+    vtype: select
+
+# dpkg-reconfigure iptables-persistent
+- name: firewall | Load Rulesets into Persistent v6
+  debconf:
+    name: iptables-persistent
+    question: iptables-persistent/autosave_v6
+    value: 'true'
+    vtype: select
+
+### Enable IP forwarding
+- sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    reload: yes
+  notify: restart openvpn

@@ -1,0 +1,17 @@
+--- 
+
+- name: start openvpn
+  service:
+    state: started
+    name: "{{ item }}"
+  with_items:
+    - openvpn
+    - openvpn@server
+
+- name: restart openvpn
+  service:
+    state: restarted
+    name: "{{ item }}"
+  with_items:
+    - openvpn
+    - openvpn@server

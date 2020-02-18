@@ -1,0 +1,9 @@
+---
+
+required_packages:
+  - sudo
+  - net-tools
+  - iptables-persistent
+  - easy-rsa
+  - openvpn
+  - openssl 

@@ -1,0 +1,50 @@
+---
+
+- stat: path=/home/ubuntu/ca
+  register: ca_dir
+
+- name: easyrsa | Create ~/ca directory
+  command: make-cadir /home/ubuntu/ca
+  become_user: ubuntu
+  when: not ca_dir.stat.exists
+
+- name: easyrsa | Symbolic Link
+  file:
+    src: /home/ubuntu/ca/openssl-1.0.0.cnf
+    dest: /home/ubuntu/ca/openssl.cnf
+    state: link
+
+- name: easyrsa | Run vars script
+  shell: bash -c "source ./vars && {{ item.rcmd }}"
+  become_user: ubuntu
+  args:
+    chdir: "/home/ubuntu/ca"
+    creates: "/home/ubuntu/ca/keys{{ item.out }}"
+  with_items:
+    - { rcmd: './clean-all'  , out: 'index.txt' }
+    - { rcmd: './pkitool --initca'   , out: 'ca.crt' }
+    - { rcmd: './pkitool --server server'   , out: 'server.crt, server.key' }
+    - { rcmd: './pkitool brapru'   , out: 'brapru.crt, brapru.csr, brapru.key' }
+
+- name: easyrsa | Move keys to /etc/openvpn/server
+  command: cp /etc/openvpn/server/ta.key /home/ubuntu/ca/keys
+  
+- name: easyrsa | Move keys to /etc/openvpn/server
+  command: cp /home/ubuntu/ca/keys/{{ item }} /etc/openvpn/server
+  with_items:
+    - ca.crt
+    - server.crt 
+    - server.key
+    - ta.key
+
+- name: easyrsa | Fetch All Required Certificates and store locally
+  synchronize:
+    src: /home/ubuntu/ca/keys/{{ item }}
+    dest: fetched
+    mode: pull 
+  with_items:
+    - ca.crt
+    - brapru.crt
+    - brapru.csr
+    - brapru.key
+    - ta.key

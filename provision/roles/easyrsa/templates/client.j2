@@ -1,0 +1,27 @@
+# No cryptography options are specified here because we want
+# the VPN server to push those settings to clients rather than
+# allow clients to dictate their crypto.
+
+client
+dev tun
+persist-key
+persist-tun
+proto udp
+nobind
+remote-cert-tls server
+auth SHA512
+verb 3
+
+# Remote server's IP address and port. IP is
+# preferable over hostname so as not to rely
+# on DNS lookups.
+remote {{ elastic_ip }} 1194
+
+# To successfully import this profile, you
+# want the client device's CA certificate copy,
+# client certificate and key, and HMAC signature
+# all in the same location as this .ovpn file.
+ca ca.crt
+cert brapru.crt
+key brapru.key
+tls-crypt ta.key

@@ -1,0 +1,36 @@
+---
+
+- name: openvpn | Install OpenVPN
+  apt:
+    name: "{{ required_packages }}"
+    state: present
+
+- name: openvpn | Add OpenVPN Group
+  group:
+    name: openvpn
+    state: present
+
+- name: openvpn | Add OpenVPN Service Account
+  user:
+    name: openvpn
+    system: yes
+    shell: /usr/bin/nologin
+    group: openvpn
+
+- name: openvpn | Generate HMAC signature file
+  shell: openvpn --genkey --secret /etc/openvpn/server/ta.key
+
+- name: openvpn | Generate Diffie-Hellman parameter
+  openssl_dhparam:
+    path: /etc/openvpn/server/dhp2048.pem
+    size: 2048
+
+- name: openvpn | Configure server.conf
+  template:
+    src: server.j2
+    dest: /etc/openvpn/server.conf
+    owner: root
+    group: root
+  notify:
+    - start openvpn
+    - restart openvpn

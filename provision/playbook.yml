@@ -1,0 +1,10 @@
+---
+
+- hosts: openvpn
+  gather_facts: yes
+  become: true
+  roles:
+    # - ssh_harden
+    - openvpn
+    - firewall
+    - easyrsa
