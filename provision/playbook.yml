@@ -2,9 +2,9 @@
 
 - hosts: openvpn
   gather_facts: yes
-  become: true
   roles:
-    # - ssh_harden
-    - openvpn
-    - firewall
+    - role: openvpn
+      become: yes
+    - role: firewall
+      become: yes
     - easyrsa

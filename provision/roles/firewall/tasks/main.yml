@@ -7,8 +7,6 @@
   template:
     src: etc_iptables_workaround.j2
     dest: /etc/iptables/rules.blank
-    owner: root
-    group: root
 
 - name: firewall | Initialize Firewall Connection Tracking (workaround)
   shell: iptables-restore /etc/iptables/rules.blank
@@ -22,8 +20,6 @@
   template:
     src: etc_iptables_rules_v6.j2
     dest: /etc/iptables/rules.v6
-    owner: root
-    group: root
 
 - name: firewall | Disable IPv6
   template:
