@@ -16,10 +16,10 @@ local machine for development and testing purposes.
 <!-- PREREQS -->
 ### Prerequisites
 The following are required for setup. See the accompanying resources to install/configure on your respective environment: 
-- Vagrant[1]
-    - vagrant-aws plugin[2]
-- Ansible[3]
-- Amazon Web Services Account[4]
+- [Vagrant][1]
+    - [vagrant-aws plugin][2]
+- [Ansible][3]
+- [Amazon Web Services Account][4]
 
 [1]: https://www.vagrantup.com/docs/installation/
 [2]: https://github.com/mitchellh/vagrant-aws
@@ -28,15 +28,12 @@ The following are required for setup. See the accompanying resources to install/
 
 ### Amazon Web Services
 A couple of things are required from the AWS console prior to starting. Once an AWS account is setup:
-- grab your AWS Access Key and AWS Secret Access
-Key[5], as these are required for Vagrant to authenticate to your AWS account.
-- Assign your account an elastic IP address[7], so we won't
-have to update the Ansible configurations every time we create a new instance.
-- Add a security group[8] that allows SSH inbound traffic (Ansible), and UDP Port
-  1194 (OpenVPN). If you want an added bit of security, you can whitelist your
+- grab your [AWS Access Key and AWS Secret Access Key][5], as these are required for Vagrant to authenticate to your AWS account.
+- Assign your account an [elastic IP address][7], so we won't have to update the Ansible configurations every time we create a new instance.
+- Add a [security group][8] that allows SSH inbound traffic (Ansible), and UDP Port 1194 (OpenVPN). If you want an added bit of security, you can whitelist your
 public IP address, but reconfiguring the security group will be necessary if
 you ever change physical locations. 
-- Lastly, this project uses an Ubuntu 18.04 LTS image. If you would like to tweek the playbook for a different Linux distribution, it is possible to feed Vagrant any AMI you desire[9]. 
+- Lastly, this project uses an Ubuntu 18.04 LTS image. If you would like to tweek the playbook for a different Linux distribution, it is possible to feed Vagrant any [AMI you desire][9]. 
 
 [5]: https://aws.amazon.com/blogs/security/wheres-my-secret-access-key/
 [6]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html
@@ -98,8 +95,8 @@ spin up a virtual machine, and generate the certificate and store them locally.
 
 Lastly, it's required to configure an OpenVPN client to actually connect to the
 running OpenVPN server. There are different clients available that are OS
-dependent, but there are many guides that will guide you through the client
-installation[10].
+dependent, but there are many guides that will guide you through the [client
+installation][10].
 
 [10]: https://www.linode.com/docs/networking/vpn/configuring-openvpn-client-devices/
 
@@ -108,6 +105,6 @@ google search of your public IP address to confirm it is your Elastic IP
 address.
 
 ### References
-[Set up a Hardened OpenVPN Server on Debian 9](https://www.linode.com/docs/networking/vpn/set-up-a-hardened-openvpn-server/)
-[Vagrant Documentation](https://www.vagrantup.com/docs/)
+[Set up a Hardened OpenVPN Server on Debian 9](https://www.linode.com/docs/networking/vpn/set-up-a-hardened-openvpn-server/)\
+[Vagrant Documentation](https://www.vagrantup.com/docs/)\
 [Ansible Documentation](https://docs.ansible.com/)
