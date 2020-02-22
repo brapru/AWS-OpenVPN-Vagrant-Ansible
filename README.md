@@ -28,7 +28,7 @@ The following are required for setup. See the accompanying resources to install/
 
 ### Amazon Web Services
 A couple of things are required from the AWS console prior to starting. Once an AWS account is setup:
-- grab your [AWS Access Key and AWS Secret Access Key][5], as these are required for Vagrant to authenticate to your AWS account.
+- Grab your [AWS Access Key and AWS Secret Access Key][5], as these are required for Vagrant to authenticate to your AWS account.
 - Assign your account an [elastic IP address][7], so we won't have to update the Ansible configurations every time we create a new instance.
 - Add a [security group][8] that allows SSH inbound traffic (Ansible), and UDP Port 1194 (OpenVPN). If you want an added bit of security, you can whitelist your
 public IP address, but reconfiguring the security group will be necessary if
@@ -63,7 +63,7 @@ Note the default Vagrantfile uses the free t2.micro instance.
 
 ### Ansible Setup
 Insure that your inventory file has your Elastic IP address, and private key
-path correctly identified..
+path correctly identified.
 ```
 openvpn ansible_ssh_host="YOUR ELASTIC IP ADDRESS" ansible_ssh_port=22 ansible_ssh_user='ubuntu' ansible_ssh_private_key_file='~/.aws/.ssh/aws-openvpn.pem'
 ``` 
