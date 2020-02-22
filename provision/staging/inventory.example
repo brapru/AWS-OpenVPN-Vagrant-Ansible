@@ -1,0 +1,1 @@
+openvpn ansible_ssh_host="YOUR ELASTIC IP ADDRESS" ansible_ssh_port=22 ansible_ssh_user='ubuntu' ansible_ssh_private_key_file='~/.aws/.ssh/aws-openvpn.pem'
